@@ -68,10 +68,8 @@ public class OrderController extends HttpServlet {
 
         ViewOrder newOrder;
         Map<Integer,Integer> itemIdsAndQuantity = new HashMap<>(cart.getIdQuantityMap());
-        if (user!=null)
-            newOrder = new ViewOrder(user.getUserId(), itemIdsAndQuantity, firstName, lastName, streetName, zipCode, city);
-        else
-            newOrder = new ViewOrder(itemIdsAndQuantity, firstName, lastName, streetName, zipCode, city);
+        newOrder = new ViewOrder(user!=null ? user.getUserId() : null, itemIdsAndQuantity, firstName, lastName,
+                streetName, zipCode, city);
 
         int orderId = OrderHandler.handleNewOrder(newOrder);
 

@@ -1,5 +1,8 @@
 <%@ page import="com.distsys.webshop.ui.view_model.ViewUser" %>
 <%@ page import="com.distsys.webshop.bo.model.enums.UserRole" %>
+<%@ page import="com.distsys.webshop.ui.view_model.ViewOrder" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.distsys.webshop.ui.view_model.ViewItem" %>
 <%--
   Created by IntelliJ IDEA.
   User: Yaman
@@ -12,6 +15,7 @@
 <head>
     <title>Profile</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/staff.css">
 </head>
 <body>
 <header>
@@ -32,7 +36,50 @@
 
 <main>
     <section>
-        <h2>Logged in as staff <%=user != null ? user.getUserId() : ""%></h2>
+        <h2>Logged in as staff: <%=user.getUserId()%></h2>
+    </section>
+
+    <section>
+        <h2>Uncompleted Orders</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Street Name</th>
+                <th>Zip Code</th>
+                <th>City</th>
+                <th>Order Date</th>
+                <th>Order Status</th>
+                <th>User ID</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%
+                List<ViewOrder> uncompletedOrders = (List<ViewOrder>) request.getAttribute("uncompletedOrders");
+                for (ViewOrder order : uncompletedOrders) {
+            %>
+            <tr>
+                <td><%= order.getId() %></td>
+                <td><%= order.getFirstName() %></td>
+                <td><%= order.getLastName() %></td>
+                <td><%= order.getStreetName() %></td>
+                <td><%= order.getZipCode() %></td>
+                <td><%= order.getCity() %></td>
+                <td><%= order.getDateTime().toLocalDate() %></td>
+                <td><%= order.getStatus() %></td>
+                <td><%= order.getUserId() != null ? order.getUserId() : "" %></td>
+                <td>
+                    <a href="${pageContext.request.contextPath}/staff/packOrder?id=<%= order.getId() %>">Pack</a>
+                </td>
+            </tr>
+            <%
+                }
+            %>
+            </tbody>
+        </table>
     </section>
 </main>
 </body>

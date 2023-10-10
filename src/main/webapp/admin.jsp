@@ -34,7 +34,7 @@
 
 <main>
     <section>
-        <h2>Logged in as admin <%= user != null ? user.getUserId() : "" %></h2>
+        <h2>Logged in as admin: <%=user.getUserId()%> %></h2>
     </section>
 
     <section>

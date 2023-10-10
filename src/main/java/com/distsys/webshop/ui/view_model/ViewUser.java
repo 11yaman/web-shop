@@ -37,7 +37,6 @@ public class ViewUser implements Serializable {
 
     public String getUserId() {
         return userId;
-
     }
 
     public String getFirstName() {

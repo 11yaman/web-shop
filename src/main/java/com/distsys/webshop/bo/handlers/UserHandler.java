@@ -29,6 +29,7 @@ public class UserHandler {
         }
         return viewUsers;
     }
+
     public static boolean handleEditUser(ViewUser viewUser) {
         return User.editUser(viewUser.getUserId(), viewUser.getFirstName(), viewUser.getLastName(), viewUser.getRole());
     }

@@ -4,6 +4,9 @@ import com.distsys.webshop.bo.model.Order;
 import com.distsys.webshop.db.management.TransactionManager;
 import com.distsys.webshop.ui.view_model.ViewOrder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OrderHandler {
     public static int handleNewOrder(ViewOrder newOrder) {
         try {
@@ -20,6 +23,32 @@ public class OrderHandler {
         }
     }
 
-    private OrderHandler() {}
+    public static List<ViewOrder> handleGetUncompletedOrders() {
+        List<Order> uncompletedOrders = Order.getUncompletedOrders();
+        List<ViewOrder> viewOrders = new ArrayList<>();
 
+        for (Order order : uncompletedOrders) {
+            ViewOrder viewOrder = new ViewOrder(
+                    order.getId(),
+                    order.getFirstName(),
+                    order.getLastName(),
+                    order.getStreetName(),
+                    order.getZipCode(),
+                    order.getCity(),
+                    order.getLocalDateTime(),
+                    order.getStatus(),
+                    order.getUserId()
+            );
+
+            viewOrders.add(viewOrder);
+        }
+
+        return viewOrders;
+    }
+
+    public static boolean handlePackOrder(int id) {
+        return Order.markOrderAsCompleted(id);
+    }
+
+    private OrderHandler() {}
 }

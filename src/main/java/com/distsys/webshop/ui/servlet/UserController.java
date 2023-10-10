@@ -50,14 +50,13 @@ public class UserController extends HttpServlet {
         ViewUser user = (ViewUser) session.getAttribute("user");
         if(user == null)
             request.getRequestDispatcher(request.getContextPath() +"/user/login").forward(request, response);
-        else if (user.getRole() == UserRole.CUSTOMER) //TODO add customer servlet and customer orders
+        else if (user.getRole() == UserRole.CUSTOMER)
             request.getRequestDispatcher(request.getContextPath() +"/customer.jsp").forward(request, response);
-        else if (user.getRole() == UserRole.STAFF) //TODO add staff servlet and staff customer orders
-            request.getRequestDispatcher(request.getContextPath() +"/staff.jsp").forward(request, response);
+        else if (user.getRole() == UserRole.STAFF)
+            request.getRequestDispatcher(request.getContextPath() +"/staff").forward(request, response);
         else if (user.getRole() == UserRole.ADMIN)
             request.getRequestDispatcher(request.getContextPath() +"/admin").forward(request, response);
     }
-
 
     private void login(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws IOException, ServletException {
@@ -92,8 +91,9 @@ public class UserController extends HttpServlet {
         if (password != null && userId != null) {
             ViewUser user = UserHandler.handleUserRegister(
                             new ViewUser(userId, password, firstName, lastName, UserRole.CUSTOMER), password);
+            System.out.println(user);
             session.setAttribute("user", user);
-            request.getRequestDispatcher(request.getContextPath() + "/user").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/user");
         } else {
             request.getRequestDispatcher(request.getContextPath() + "/register.jsp").forward(request, response);
         }

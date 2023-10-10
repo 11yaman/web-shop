@@ -32,7 +32,7 @@
 
 <main>
     <section>
-        <h2>Logged in as user <%=user != null ? user.getUserId() : ""%></h2>
+        <h2>Logged in as customer: <%=user.getUserId()%></h2>
     </section>
 </main>
 </body>

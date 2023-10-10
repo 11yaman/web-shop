@@ -14,7 +14,7 @@ public class Order {
     private String zipCode;
     private String city;
     private String userId;
-    private String total;
+    private double total;
     private LocalDateTime dateTime;
     private OrderStatus status;
 
@@ -43,11 +43,32 @@ public class Order {
         this.status = OrderStatus.CREATED;
     }
 
+    protected Order(int id, String firstName, String lastName, String streetName, String zipCode, String city,
+                    LocalDateTime dateTime, OrderStatus status, String userId) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.streetName = streetName;
+        this.zipCode = zipCode;
+        this.city = city;
+        this.userId = userId;
+        this.dateTime = dateTime;
+        this.status = status;
+        this.itemIdsAndQuantity = new HashMap<>();
+    }
 
     public static Order newOrder(String userId, Map<Integer, Integer> itemIdsAndQuantity, String firstName,
                                  String lastName, String streetName, String zipCode, String city) {
         return OrderDB.createNewOrder(new Order(userId, itemIdsAndQuantity, firstName,
                 lastName, streetName, zipCode, city));
+    }
+
+    public static List<Order> getUncompletedOrders() {
+        return OrderDB.findUncompletedOrders();
+    }
+
+    public static boolean markOrderAsCompleted(int id) {
+        return OrderDB.updateOrderAsCompleted(id);
     }
 
     public Map<Integer,Integer> getIdQuantityMap() {
@@ -86,8 +107,12 @@ public class Order {
         return userId;
     }
 
-    public String getTotal() {
+    public double getTotal() {
         return total;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     public Map<Integer, Integer> getItemIdsAndQuantity() {
