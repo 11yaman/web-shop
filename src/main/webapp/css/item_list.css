@@ -40,14 +40,30 @@ h2 {
     margin-top: 20px;
 }
 
-a[href*="cart/add"] {
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination a {
+    display: inline-block;
     background-color: #333;
     color: #fff;
     text-decoration: none;
     padding: 5px 10px;
     border-radius: 5px;
+    margin: 0 5px;
 }
 
-a[href*="cart/add"]:hover {
+.pagination a:hover {
     background-color: #555;
+}
+
+.pagination .disabled {
+    background-color: #ccc;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 0 5px;
+    cursor: not-allowed;
 }

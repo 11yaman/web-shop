@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "AdminController", value = {"/admin", "/admin/editUser"})
+@WebServlet(name = "AdminController", value = {"/admin", "/admin/editUser", "/admin/saveUser"})
 public class AdminController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -21,17 +21,26 @@ public class AdminController extends HttpServlet {
         String action = request.getRequestURI();
         HttpSession session = request.getSession();
 
+        ViewUser admin = (ViewUser) session.getAttribute("user");
+        if (admin == null || admin.getRole() != UserRole.ADMIN) {
+            response.sendRedirect(request.getContextPath() + "/user/login");
+            return;
+        }
+
         switch (action) {
             case "/admin":
                 listAllUsers(request, response, session);
                 break;
             case "/admin/editUser":
+                editUser(request, response, session);
+                break;
+            case "/admin/saveUser":
+                saveUser(request, response, session);
                 break;
             default:
                 break;
         }
     }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -41,21 +50,44 @@ public class AdminController extends HttpServlet {
 
     private void listAllUsers(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws IOException, ServletException {
-        ViewUser adminUser = (ViewUser) session.getAttribute("user");
 
-        if (adminUser != null && adminUser.getRole() == UserRole.ADMIN) {
-            List<ViewUser> allUsers = UserHandler.handleGetAllUsers();
+        List<ViewUser> allUsers = UserHandler.handleGetAllUsers();
+        request.setAttribute("allUsers", allUsers);
 
-            int currentPage = 1;
-            String page = request.getParameter("page");
-            if (page != null)
-                currentPage = Integer.parseInt(page);
+        String page = request.getParameter("page");
+        request.setAttribute("currentPage", page != null ? Integer.parseInt(page) : 1);
+        request.getRequestDispatcher(request.getContextPath() + "/admin.jsp").forward(request, response);
+    }
 
-            request.setAttribute("allUsers", allUsers);
-            request.setAttribute("currentPage", currentPage);
-            request.getRequestDispatcher(request.getContextPath() + "/admin.jsp").forward(request, response);
+    private void editUser(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+            throws IOException, ServletException {
+        String userId = request.getParameter("id");
+
+        if (userId != null) {
+            ViewUser userToEdit = UserHandler.getUserById(userId);
+            if (userToEdit != null) {
+                request.setAttribute("userToEdit", userToEdit);
+                request.getRequestDispatcher("/edit_user.jsp").forward(request, response);
+            }
         } else {
-            response.sendRedirect(request.getContextPath() + "/user/login");
+            response.sendRedirect(request.getContextPath() + "/admin");
         }
     }
+
+    private void saveUser(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+            throws IOException, ServletException {
+
+        String userId = request.getParameter("userId");
+        UserRole newRole = UserRole.valueOf(request.getParameter("userRole"));
+        String newFirstName = request.getParameter("firstName");
+        String newLastName = request.getParameter("lastName");
+
+        ViewUser user = new ViewUser(userId, newFirstName, newLastName, newRole);
+        if (UserHandler.handleEditUser(user)) {
+            response.sendRedirect(request.getContextPath() + "/admin");
+        } else {
+            request.getRequestDispatcher(request.getContextPath() + "/admin/editUser?id=" + userId);
+        }
+    }
+
 }

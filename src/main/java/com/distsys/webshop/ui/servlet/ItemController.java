@@ -23,9 +23,10 @@ public class ItemController extends HttpServlet {
 
     private void listAllItems(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<ViewItem> items = ItemHandler.handleGetAllItems();
-
         request.setAttribute("items", items);
 
+        String page = request.getParameter("page");
+        request.setAttribute("currentPage", page != null ? Integer.parseInt(page) : 1);
         request.getRequestDispatcher("/item_list.jsp").forward(request, response);
     }
 }

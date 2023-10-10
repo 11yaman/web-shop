@@ -54,6 +54,7 @@ public class CartController extends HttpServlet {
         String itemId = request.getParameter("itemToAdd");
 
         if (itemId != null) {
+            //TODO
             ViewItem itemToAdd = ItemHandler.handleGetItemById(Integer.parseInt(itemId));
             if (itemToAdd != null && moreItemsCanBeAdded(itemToAdd, cart))
                 CartHandler.handleAddItem(cart, itemToAdd);
@@ -67,6 +68,7 @@ public class CartController extends HttpServlet {
         String itemId = request.getParameter("itemToRemove");
 
         if (itemId != null) {
+            //TODO
             ViewItem itemToRemove = ItemHandler.handleGetItemById(Integer.parseInt(itemId));
             CartHandler.handleRemoveItem(cart, itemToRemove);
         }

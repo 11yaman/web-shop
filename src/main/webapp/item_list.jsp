@@ -45,24 +45,60 @@
             </tr>
             </thead>
             <tbody>
-                <%
-                    List<ViewItem> items = (List<ViewItem>) request.getAttribute("items");
-                    if (items != null && !items.isEmpty()) {
-                        for (ViewItem item : items) {
-                %>
-                <tr>
-                    <td><%= item.getName() %></td>
-                    <td><%= item.getPrice() %> SEK </td>
-                    <td> <%= item.getStockQuantity() %> </td>
-                    <td>
-                        <a href="${pageContext.request.contextPath}/cart/add?itemToAdd=<%= item.getId() %>">Add to Cart</a>
-                    </td>
-                </tr>
+            <%
+                List<ViewItem> items = (List<ViewItem>) request.getAttribute("items");
+                if (items!=null && !items.isEmpty()){
+                    int currentPage = (int) request.getAttribute("currentPage");
+                    int itemsPerPage = 20;
+
+                    int startIdx = (currentPage - 1) * itemsPerPage;
+                    int endIdx = Math.min(startIdx + itemsPerPage, items.size());
+                    for (int i = startIdx; i < endIdx; i++) {
+                        ViewItem item = items.get(i);
+            %>
+            <tr>
+                <td><%= item.getName() %></td>
+                <td><%= item.getPrice() %> SEK</td>
+                <td><%= item.getStockQuantity() %></td>
+                <td>
+                    <a href="${pageContext.request.contextPath}/cart/add?itemToAdd=<%= item.getId() %>">Add to Cart</a>
+                </td>
+            </tr>
             <%
                 }
-                  }
             %>
+            </tbody>
         </table>
+
+        <div class="pagination">
+            <%
+                int totalPages = (int) Math.ceil((double) items.size() / itemsPerPage);
+            %>
+            <%
+                if (currentPage > 1) {
+            %>
+            <a href="${pageContext.request.contextPath}/allItems?page=<%= currentPage - 1 %>">Back</a>
+            <%
+            } else {
+            %>
+            <span class="disabled">Back</span>
+            <%
+                }
+            %>
+
+            <%
+                if (currentPage < totalPages) {
+            %>
+            <a href="${pageContext.request.contextPath}/allItems?page=<%= currentPage + 1 %>">Next</a>
+            <%
+            } else {
+            %>
+            <span class="disabled">Next</span>
+            <%
+                }
+                }
+            %>
+        </div>
     </section>
 </main>
 </body>

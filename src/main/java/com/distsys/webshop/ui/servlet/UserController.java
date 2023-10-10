@@ -50,9 +50,9 @@ public class UserController extends HttpServlet {
         ViewUser user = (ViewUser) session.getAttribute("user");
         if(user == null)
             request.getRequestDispatcher(request.getContextPath() +"/user/login").forward(request, response);
-        else if (user.getRole() == UserRole.CUSTOMER)
-            request.getRequestDispatcher(request.getContextPath() +"/user.jsp").forward(request, response);
-        else if (user.getRole() == UserRole.STAFF)
+        else if (user.getRole() == UserRole.CUSTOMER) //TODO add customer servlet and customer orders
+            request.getRequestDispatcher(request.getContextPath() +"/customer.jsp").forward(request, response);
+        else if (user.getRole() == UserRole.STAFF) //TODO add staff servlet and staff customer orders
             request.getRequestDispatcher(request.getContextPath() +"/staff.jsp").forward(request, response);
         else if (user.getRole() == UserRole.ADMIN)
             request.getRequestDispatcher(request.getContextPath() +"/admin").forward(request, response);

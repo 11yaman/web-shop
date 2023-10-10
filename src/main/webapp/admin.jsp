@@ -1,5 +1,6 @@
 <%@ page import="com.distsys.webshop.ui.view_model.ViewUser" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.distsys.webshop.bo.model.enums.UserRole" %>
 <%--
   Created by IntelliJ IDEA.
   User: Yaman
@@ -23,8 +24,8 @@
         <a href="${pageContext.request.contextPath}/cart">Cart</a>
         <a href="${pageContext.request.contextPath}/user">Profile</a>
         <% ViewUser user = (ViewUser) session.getAttribute("user");
-            if (user == null){
-                request.getRequestDispatcher(request.getContextPath() +"/user/login").forward(request, response);
+            if (user == null || user.getRole()!= UserRole.ADMIN){
+                response.sendRedirect(request.getContextPath() +"/user/login");
             } else { %>
         <a href="${pageContext.request.contextPath}/user/logout">Log Out</a>
         <%  } %>
@@ -51,13 +52,13 @@
             <tbody>
             <%
                 List<ViewUser> allUsers = (List<ViewUser>) request.getAttribute("allUsers");
-                if (allUsers!=null){
-                    int currentPage = request.getParameter("page")!=null ? Integer.parseInt(request.getParameter("page")) : 1;
+                if (allUsers!=null && !allUsers.isEmpty()){
+                    int currentPage = (int) request.getAttribute("currentPage");
                     int itemsPerPage = 20;
-                    int start = (currentPage - 1) * itemsPerPage;
-                    int end = Math.min(start + itemsPerPage, allUsers.size());
 
-                    for (int i = start; i < end; i++) {
+                    int startIdx = (currentPage - 1) * itemsPerPage;
+                    int endIdx = Math.min(startIdx + itemsPerPage, allUsers.size());
+                    for (int i = startIdx; i < endIdx; i++) {
                         ViewUser u = allUsers.get(i);
             %>
             <tr>
@@ -66,7 +67,7 @@
                 <td><%= u.getLastName() %></td>
                 <td><%= u.getRole() %></td>
                 <td>
-                    <a href="<%= request.getContextPath() %>/admin/editUser?id=<%= u.getUserId() %>">Edit</a>
+                    <a href="${pageContext.request.contextPath}/admin/editUser?id=<%= u.getUserId() %>">Edit</a>
                 </td>
             </tr>
             <%
@@ -82,7 +83,7 @@
             <%
                 if (currentPage > 1) {
             %>
-            <a href="<%= request.getContextPath() %>/admin?page=<%= currentPage - 1 %>">Back</a>
+            <a href="${pageContext.request.contextPath}/admin?page=<%= currentPage - 1 %>">Back</a>
             <%
             } else {
             %>
@@ -94,7 +95,7 @@
             <%
                 if (currentPage < totalPages) {
             %>
-            <a href="<%= request.getContextPath() %>/admin?page=<%= currentPage + 1 %>">Next</a>
+            <a href="${pageContext.request.contextPath}/admin?page=<%= currentPage + 1 %>">Next</a>
             <%
             } else {
             %>

@@ -1,4 +1,5 @@
 <%@ page import="com.distsys.webshop.ui.view_model.ViewUser" %>
+<%@ page import="com.distsys.webshop.bo.model.enums.UserRole" %>
 <%--
   Created by IntelliJ IDEA.
   User: Yaman
@@ -21,8 +22,8 @@
         <a href="${pageContext.request.contextPath}/cart">Cart</a>
         <a href="${pageContext.request.contextPath}/user">Profile</a>
         <% ViewUser user = (ViewUser) session.getAttribute("user");
-            if (user == null){
-                request.getRequestDispatcher(request.getContextPath() +"/user/login").forward(request, response);
+            if (user == null || user.getRole()!= UserRole.CUSTOMER){
+                response.sendRedirect(request.getContextPath() +"/user/login");
             } else { %>
         <a href="${pageContext.request.contextPath}/user/logout">Log Out</a>
         <%  } %>

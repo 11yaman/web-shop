@@ -23,7 +23,7 @@ tr:hover {
     background-color: #f5f5f5;
 }
 
-a[href*="admin/editUser"] {
+a[href*="admin/editUser.jsp"] {
     background-color: #333;
     color: #fff;
     text-decoration: none;
@@ -31,7 +31,7 @@ a[href*="admin/editUser"] {
     border-radius: 5px;
 }
 
-a[href*="admin/editUser"]:hover {
+a[href*="admin/editUser.jsp"]:hover {
     background-color: #555;
 }
 
@@ -41,17 +41,18 @@ h2 {
 }
 
 .pagination {
-    margin-top: 20px;
     text-align: center;
+    margin-top: 20px;
 }
 
 .pagination a {
+    display: inline-block;
     background-color: #333;
     color: #fff;
     text-decoration: none;
     padding: 5px 10px;
     border-radius: 5px;
-    margin-right: 5px;
+    margin: 0 5px;
 }
 
 .pagination a:hover {
@@ -59,6 +60,10 @@ h2 {
 }
 
 .pagination .disabled {
-    color: #666;
+    background-color: #ccc;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 0 5px;
     cursor: not-allowed;
 }

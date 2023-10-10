@@ -3,6 +3,7 @@ package com.distsys.webshop.bo.handlers;
 import com.distsys.webshop.bo.model.Item;
 import com.distsys.webshop.db.data_access.SearchType;
 import com.distsys.webshop.ui.view_model.ViewItem;
+import com.distsys.webshop.ui.view_model.ViewUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,4 +39,5 @@ public class ItemHandler {
 
     private ItemHandler() {
     }
+
 }
