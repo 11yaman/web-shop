@@ -1,14 +1,14 @@
-package com.distsys.webshop.ui.view_model;
+package com.distsys.webshop.ui.viewmodel;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class ViewItem implements Serializable {
+public class ItemDto implements Serializable {
     private final int id;
     private final String name;
     private final double price;
     private final int stockQuantity;
-    public ViewItem(int id, String name, double price, int stockQuantity) {
+    public ItemDto(int id, String name, double price, int stockQuantity) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -37,8 +37,8 @@ public class ViewItem implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ViewItem viewItem = (ViewItem) o;
-        return id == viewItem.id;
+        ItemDto itemDto = (ItemDto) o;
+        return id == itemDto.id;
     }
 
     @Override

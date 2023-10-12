@@ -1,9 +1,7 @@
 package com.distsys.webshop.bo.model;
 
-import com.distsys.webshop.bo.model.enums.UserRole;
-import com.distsys.webshop.db.data_access.ItemDB;
-import com.distsys.webshop.db.data_access.SearchType;
-import com.distsys.webshop.db.data_access.UserDB;
+import com.distsys.webshop.bo.enums.UserRole;
+import com.distsys.webshop.db.dao.UserDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,26 +30,25 @@ public class User {
     }
 
     public static User login(String userId, String password) {
-        return UserDB.authenticate(userId, password);
+        return UserDao.authenticate(userId, password);
     }
 
     public static boolean register(String userId, String password, String firstName, String lastName, UserRole role) {
         User user = new User(userId, password, firstName, lastName, role);
-        return UserDB.createNewUser(user, password);
+        return UserDao.createNewUser(user, password);
     }
 
     public static Boolean editUser(String userId, String firstName, String lastName, UserRole role) {
-        return UserDB.updateUser(new User(userId, firstName, lastName, role));
+        return UserDao.updateUser(new User(userId, firstName, lastName, role));
     }
 
     public static User getUserById(String userId) {
-        return UserDB.findById(userId);
+        return UserDao.findById(userId);
     }
 
     public static List<User> getAllUsers() {
-        return UserDB.findAllUsers();
+        return UserDao.findAllUsers();
     }
-
 
     public String getUserId() {
         return userId;

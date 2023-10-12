@@ -1,6 +1,6 @@
 package com.distsys.webshop.bo.model;
-import com.distsys.webshop.bo.model.enums.OrderStatus;
-import com.distsys.webshop.db.data_access.OrderDB;
+import com.distsys.webshop.bo.enums.OrderStatus;
+import com.distsys.webshop.db.dao.OrderDao;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -57,18 +57,21 @@ public class Order {
         this.itemIdsAndQuantity = new HashMap<>();
     }
 
-    public static Order newOrder(String userId, Map<Integer, Integer> itemIdsAndQuantity, String firstName,
-                                 String lastName, String streetName, String zipCode, String city) {
-        return OrderDB.createNewOrder(new Order(userId, itemIdsAndQuantity, firstName,
-                lastName, streetName, zipCode, city));
+    public static Order createNewOrder(String userId, Map<Integer, Integer> itemIdsAndQuantity, String firstName,
+                                       String lastName, String streetName, String zipCode, String city) {
+        Order orderToAdd = new Order(userId, itemIdsAndQuantity, firstName,
+                lastName, streetName, zipCode, city);
+        OrderDao.addNewOrder(orderToAdd);
+        OrderItem.addOrderItems(orderToAdd);
+        return orderToAdd;
     }
 
     public static List<Order> getUncompletedOrders() {
-        return OrderDB.findUncompletedOrders();
+        return OrderDao.findUncompletedOrders();
     }
 
     public static boolean markOrderAsCompleted(int id) {
-        return OrderDB.updateOrderAsCompleted(id);
+        return OrderDao.updateOrderAsCompleted(id);
     }
 
     public Map<Integer,Integer> getIdQuantityMap() {

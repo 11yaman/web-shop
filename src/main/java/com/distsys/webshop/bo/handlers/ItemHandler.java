@@ -1,39 +1,38 @@
 package com.distsys.webshop.bo.handlers;
 
 import com.distsys.webshop.bo.model.Item;
-import com.distsys.webshop.db.data_access.SearchType;
-import com.distsys.webshop.ui.view_model.ViewItem;
-import com.distsys.webshop.ui.view_model.ViewUser;
+import com.distsys.webshop.bo.enums.SearchType;
+import com.distsys.webshop.ui.viewmodel.ItemDto;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class ItemHandler {
-    public static List<ViewItem> handleGetItemsByName(String searchParam) {
+    public static List<ItemDto> handleGetItemsByName(String searchParam) {
         List<Item> list = Item.getItems(SearchType.NAME, searchParam);
-        List<ViewItem> viewItems = new ArrayList<>();
+        List<ItemDto> itemDtos = new ArrayList<>();
         for (Item item: list) {
-            viewItems.add(new ViewItem(item.getId(), item.getName(), item.getPrice(), item.getStockQuantity()));
+            itemDtos.add(new ItemDto(item.getId(), item.getName(), item.getPrice(), item.getStockQuantity()));
         }
-        return viewItems;
+        return itemDtos;
     }
 
-    public static List<ViewItem> handleGetAllItems() {
+    public static List<ItemDto> handleGetAllItems() {
         List<Item> list = Item.getAllItems();
-        List<ViewItem> viewItems = new ArrayList<>();
+        List<ItemDto> itemDtos = new ArrayList<>();
         for (Item item: list) {
-            viewItems.add(new ViewItem(item.getId(), item.getName(), item.getPrice(), item.getStockQuantity()));
+            itemDtos.add(new ItemDto(item.getId(), item.getName(), item.getPrice(), item.getStockQuantity()));
         }
-        return viewItems;
+        return itemDtos;
     }
 
-    public static ViewItem handleGetItemById(int id) {
+    public static ItemDto handleGetItemById(int id) {
         Item item = Item.getItemById(id);
-        return item==null ? null : new ViewItem(item.getId(), item.getName(), item.getPrice(), item.getStockQuantity());
+        return item==null ? null : new ItemDto(item.getId(), item.getName(), item.getPrice(), item.getStockQuantity());
     }
 
-    public static void handleNewOrderCreated(Map<Integer, Integer> idQuantityMap) {
+    static void handleNewOrderCreated(Map<Integer, Integer> idQuantityMap) {
         Item.updateStockAfterOrder(idQuantityMap);
     }
 

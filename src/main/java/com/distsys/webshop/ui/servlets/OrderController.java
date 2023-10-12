@@ -1,9 +1,9 @@
-package com.distsys.webshop.ui.servlet;
+package com.distsys.webshop.ui.servlets;
 
 import com.distsys.webshop.bo.handlers.OrderHandler;
-import com.distsys.webshop.ui.view_model.ViewCart;
-import com.distsys.webshop.ui.view_model.ViewOrder;
-import com.distsys.webshop.ui.view_model.ViewUser;
+import com.distsys.webshop.ui.viewmodel.CartDto;
+import com.distsys.webshop.ui.viewmodel.OrderDto;
+import com.distsys.webshop.ui.viewmodel.UserDto;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,17 +16,17 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "OrderController", value = {"/checkout", "/order","/order/confirm"})
+@WebServlet(name = "OrderController", value = {"/order/checkout", "/order/confirm"})
 public class OrderController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getRequestURI();
         HttpSession session = request.getSession();
-        ViewCart cart = (ViewCart) session.getAttribute("cart");
+        CartDto cart = (CartDto) session.getAttribute("cart");
 
         switch (action) {
-            case "/checkout":
+            case "/order/checkout":
                 checkout(request, response, session, cart);
                 break;
             case "/order/confirm":
@@ -43,7 +43,7 @@ public class OrderController extends HttpServlet {
         doGet(request,response);
     }
 
-    private void checkout(HttpServletRequest request, HttpServletResponse response, HttpSession session, ViewCart cart)
+    private void checkout(HttpServletRequest request, HttpServletResponse response, HttpSession session, CartDto cart)
             throws IOException, ServletException {
         request.setAttribute("cart", cart);
         session.setAttribute("checkoutVisited", true);
@@ -51,9 +51,9 @@ public class OrderController extends HttpServlet {
     }
 
     private void confirmOrder(HttpServletRequest request, HttpServletResponse response, HttpSession session,
-                              ViewCart cart)
+                              CartDto cart)
             throws IOException, ServletException {
-        ViewUser user = (ViewUser) session.getAttribute("user");
+        UserDto user = (UserDto) session.getAttribute("user");
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String streetName = request.getParameter("streetName");
@@ -66,9 +66,9 @@ public class OrderController extends HttpServlet {
             return;
         }
 
-        ViewOrder newOrder;
+        OrderDto newOrder;
         Map<Integer,Integer> itemIdsAndQuantity = new HashMap<>(cart.getIdQuantityMap());
-        newOrder = new ViewOrder(user!=null ? user.getUserId() : null, itemIdsAndQuantity, firstName, lastName,
+        newOrder = new OrderDto(user!=null ? user.getUserId() : null, itemIdsAndQuantity, firstName, lastName,
                 streetName, zipCode, city);
 
         int orderId = OrderHandler.handleNewOrder(newOrder);

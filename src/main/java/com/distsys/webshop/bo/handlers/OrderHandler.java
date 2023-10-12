@@ -1,17 +1,17 @@
 package com.distsys.webshop.bo.handlers;
 
 import com.distsys.webshop.bo.model.Order;
-import com.distsys.webshop.db.management.TransactionManager;
-import com.distsys.webshop.ui.view_model.ViewOrder;
+import com.distsys.webshop.db.managers.TransactionManager;
+import com.distsys.webshop.ui.viewmodel.OrderDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderHandler {
-    public static int handleNewOrder(ViewOrder newOrder) {
+    public static int handleNewOrder(OrderDto newOrder) {
         try {
             TransactionManager.begin();
-            Order order = Order.newOrder(newOrder.getUserId(), newOrder.getIdQuantityMap(), newOrder.getFirstName(),
+            Order order = Order.createNewOrder(newOrder.getUserId(), newOrder.getIdQuantityMap(), newOrder.getFirstName(),
                     newOrder.getLastName(), newOrder.getStreetName(), newOrder.getZipCode(), newOrder.getCity());
             ItemHandler.handleNewOrderCreated(order.getIdQuantityMap());
             TransactionManager.commit();
@@ -23,12 +23,12 @@ public class OrderHandler {
         }
     }
 
-    public static List<ViewOrder> handleGetUncompletedOrders() {
+    public static List<OrderDto> handleGetUncompletedOrders() {
         List<Order> uncompletedOrders = Order.getUncompletedOrders();
-        List<ViewOrder> viewOrders = new ArrayList<>();
+        List<OrderDto> orderDtos = new ArrayList<>();
 
         for (Order order : uncompletedOrders) {
-            ViewOrder viewOrder = new ViewOrder(
+            OrderDto orderDto = new OrderDto(
                     order.getId(),
                     order.getFirstName(),
                     order.getLastName(),
@@ -40,10 +40,10 @@ public class OrderHandler {
                     order.getUserId()
             );
 
-            viewOrders.add(viewOrder);
+            orderDtos.add(orderDto);
         }
 
-        return viewOrders;
+        return orderDtos;
     }
 
     public static boolean handlePackOrder(int id) {

@@ -1,8 +1,8 @@
-<%@ page import="com.distsys.webshop.ui.view_model.ViewUser" %>
-<%@ page import="com.distsys.webshop.bo.model.enums.UserRole" %>
-<%@ page import="com.distsys.webshop.ui.view_model.ViewOrder" %>
+<%@ page import="com.distsys.webshop.ui.viewmodel.UserDto" %>
+<%@ page import="com.distsys.webshop.bo.enums.UserRole" %>
+<%@ page import="com.distsys.webshop.ui.viewmodel.OrderDto" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.distsys.webshop.ui.view_model.ViewItem" %>
+<%@ page import="com.distsys.webshop.ui.viewmodel.ItemDto" %>
 <%--
   Created by IntelliJ IDEA.
   User: Yaman
@@ -15,17 +15,17 @@
 <head>
     <title>Profile</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/staff.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/staff_profile.css">
 </head>
 <body>
 <header>
-    <a href="${pageContext.request.contextPath}/allItems">
+    <a href="${pageContext.request.contextPath}/items">
         <h1>Our store</h1>
     </a>
     <nav>
-        <a href="${pageContext.request.contextPath}/cart">Cart</a>
-        <a href="${pageContext.request.contextPath}/user">Profile</a>
-        <% ViewUser user = (ViewUser) session.getAttribute("user");
+        <a href="${pageContext.request.contextPath}/cart/list">Cart</a>
+        <a href="${pageContext.request.contextPath}/user/profile">Profile</a>
+        <% UserDto user = (UserDto) session.getAttribute("user");
             if (user == null || user.getRole() != UserRole.STAFF){
                 request.getRequestDispatcher(request.getContextPath() +"/user/login").forward(request, response);
             } else { %>
@@ -58,8 +58,8 @@
             </thead>
             <tbody>
             <%
-                List<ViewOrder> uncompletedOrders = (List<ViewOrder>) request.getAttribute("uncompletedOrders");
-                for (ViewOrder order : uncompletedOrders) {
+                List<OrderDto> uncompletedOrders = (List<OrderDto>) request.getAttribute("uncompletedOrders");
+                for (OrderDto order : uncompletedOrders) {
             %>
             <tr>
                 <td><%= order.getId() %></td>

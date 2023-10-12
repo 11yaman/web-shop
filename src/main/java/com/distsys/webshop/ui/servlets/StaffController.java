@@ -1,11 +1,9 @@
-package com.distsys.webshop.ui.servlet;
+package com.distsys.webshop.ui.servlets;
 
 import com.distsys.webshop.bo.handlers.OrderHandler;
-import com.distsys.webshop.bo.handlers.UserHandler;
-import com.distsys.webshop.bo.model.Order;
-import com.distsys.webshop.bo.model.enums.UserRole;
-import com.distsys.webshop.ui.view_model.ViewOrder;
-import com.distsys.webshop.ui.view_model.ViewUser;
+import com.distsys.webshop.bo.enums.UserRole;
+import com.distsys.webshop.ui.viewmodel.OrderDto;
+import com.distsys.webshop.ui.viewmodel.UserDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,21 +14,21 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "StaffController", value = {"/staff", "/staff/packOrder"})
+@WebServlet(name = "StaffController", value = {"/staff/profile", "/staff/packOrder"})
 public class StaffController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getRequestURI();
         HttpSession session = request.getSession();
 
-        ViewUser admin = (ViewUser) session.getAttribute("user");
+        UserDto admin = (UserDto) session.getAttribute("user");
         if (admin == null || admin.getRole() != UserRole.STAFF) {
             response.sendRedirect(request.getContextPath() + "/user/login");
             return;
         }
 
         switch (action) {
-            case "/staff":
+            case "/staff/profile":
                 listUncompletedOrders(request, response, session);
                 break;
             case "/staff/packOrder":
@@ -47,7 +45,7 @@ public class StaffController extends HttpServlet {
 
     private void listUncompletedOrders(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws ServletException, IOException {
-        List<ViewOrder> uncompletedOrders = OrderHandler.handleGetUncompletedOrders();
+        List<OrderDto> uncompletedOrders = OrderHandler.handleGetUncompletedOrders();
         request.setAttribute("uncompletedOrders", uncompletedOrders);
         request.getRequestDispatcher(request.getContextPath() +"/staff.jsp").forward(request, response);
     }
@@ -58,6 +56,6 @@ public class StaffController extends HttpServlet {
 
         if (orderId != null)
              OrderHandler.handlePackOrder(Integer.parseInt(orderId));
-        response.sendRedirect(request.getContextPath() + "/staff");
+        response.sendRedirect(request.getContextPath() + "/staff/profile");
     }
 }

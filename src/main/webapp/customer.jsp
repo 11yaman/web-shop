@@ -1,5 +1,5 @@
-<%@ page import="com.distsys.webshop.ui.view_model.ViewUser" %>
-<%@ page import="com.distsys.webshop.bo.model.enums.UserRole" %>
+<%@ page import="com.distsys.webshop.ui.viewmodel.UserDto" %>
+<%@ page import="com.distsys.webshop.bo.enums.UserRole" %>
 <%--
   Created by IntelliJ IDEA.
   User: Yaman
@@ -15,13 +15,13 @@
 </head>
 <body>
 <header>
-    <a href="${pageContext.request.contextPath}/allItems">
+    <a href="${pageContext.request.contextPath}/items">
       <h1>Our store</h1>
     </a>
     <nav>
-        <a href="${pageContext.request.contextPath}/cart">Cart</a>
-        <a href="${pageContext.request.contextPath}/user">Profile</a>
-        <% ViewUser user = (ViewUser) session.getAttribute("user");
+        <a href="${pageContext.request.contextPath}/cart/list">Cart</a>
+        <a href="${pageContext.request.contextPath}/user/profile">Profile</a>
+        <% UserDto user = (UserDto) session.getAttribute("user");
             if (user == null || user.getRole()!= UserRole.CUSTOMER){
                 response.sendRedirect(request.getContextPath() +"/user/login");
             } else { %>

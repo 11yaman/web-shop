@@ -1,8 +1,8 @@
-<%@ page import="com.distsys.webshop.ui.view_model.ViewItem" %>
+<%@ page import="com.distsys.webshop.ui.viewmodel.ItemDto" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.distsys.webshop.ui.view_model.ViewCart" %>
+<%@ page import="com.distsys.webshop.ui.viewmodel.CartDto" %>
 <%@ page import="com.distsys.webshop.bo.handlers.CartHandler" %>
-<%@ page import="com.distsys.webshop.ui.view_model.ViewUser" %><%--
+<%@ page import="com.distsys.webshop.ui.viewmodel.UserDto" %><%--
 <%--
   Created by IntelliJ IDEA.
   User: Yaman
@@ -20,13 +20,13 @@
 </head>
 <body>
 <header>
-    <a href="${pageContext.request.contextPath}/allItems">
+    <a href="${pageContext.request.contextPath}/items">
         <h1>Our store</h1>
     </a>
     <nav>
-        <a href="${pageContext.request.contextPath}/cart">Cart</a>
-        <a href="${pageContext.request.contextPath}/user">Profile</a>
-        <% ViewUser user = (ViewUser) session.getAttribute("user");
+        <a href="${pageContext.request.contextPath}/cart/list">Cart</a>
+        <a href="${pageContext.request.contextPath}/user/profile">Profile</a>
+        <% UserDto user = (UserDto) session.getAttribute("user");
             if (user == null){ %>
         <a href="${pageContext.request.contextPath}/user/login">Log in</a>
         <%  } else { %>
@@ -49,13 +49,13 @@
             </thead>
             <tbody>
                 <%
-                    ViewCart cart  = (ViewCart) session.getAttribute("cart");
+                    CartDto cart  = (CartDto) session.getAttribute("cart");
                     double total = 0.0;
                     if ( cart != null ) {
-                        List<ViewItem> cartItems = cart.getItems();
+                        List<ItemDto> cartItems = cart.getItems();
                         total = CartHandler.handleGetTotal(cart);
                         if (!cartItems.isEmpty()) {
-                            for (ViewItem cartItem : cartItems) {
+                            for (ItemDto cartItem : cartItems) {
                 %>
             <tr>
                 <td><%= cartItem.getName() %></td>
@@ -76,7 +76,7 @@
         <%
             if (cart != null && !cart.getItems().isEmpty()) {
         %>
-        <a href="${pageContext.request.contextPath}/checkout" class="button">Checkout</a>
+        <a href="${pageContext.request.contextPath}/order/checkout" class="button">Checkout</a>
         <%
         } else {
         %>

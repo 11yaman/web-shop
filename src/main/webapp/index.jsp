@@ -8,5 +8,5 @@
 --%>
 <!DOCTYPE html>
 <html>
-    <jsp:forward page="/allItems"/>
+    <jsp:forward page="/items"/>
 </html>

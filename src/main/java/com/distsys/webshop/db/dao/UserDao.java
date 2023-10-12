@@ -1,8 +1,8 @@
-package com.distsys.webshop.db.data_access;
+package com.distsys.webshop.db.dao;
 
 import com.distsys.webshop.bo.model.User;
-import com.distsys.webshop.bo.model.enums.UserRole;
-import com.distsys.webshop.db.management.DBManager;
+import com.distsys.webshop.bo.enums.UserRole;
+import com.distsys.webshop.db.managers.DbManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDB extends User {
+public class UserDao extends User {
     private final static String SELECT_ALL = "SELECT * FROM t_user";
     private final static String SELECT_USER = "SELECT * FROM t_user WHERE id = ? AND password = ?";
     private final static String INSERT_USER = "INSERT INTO t_user (first_name, last_name, id, password, role) " +
@@ -21,9 +21,9 @@ public class UserDB extends User {
     private static final String SELECT_USER_BY_ID = "SELECT * FROM t_user WHERE id = ?";
 
 
-    public static UserDB authenticate(String userId, String password) {
+    public static UserDao authenticate(String userId, String password) {
 
-        Connection con = DBManager.getConnection();
+        Connection con = DbManager.getConnection();
 
         try (PreparedStatement ps = con.prepareStatement(SELECT_USER)) {
             ps.setString(1, userId);
@@ -34,7 +34,7 @@ public class UserDB extends User {
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
                 String userRole = rs.getString("role");
-                return new UserDB(userId, password, firstName, lastName, UserRole.valueOf(userRole));
+                return new UserDao(userId, password, firstName, lastName, UserRole.valueOf(userRole));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,7 +43,7 @@ public class UserDB extends User {
     }
 
     public static boolean createNewUser(User user, String password) {
-        Connection connection = DBManager.getConnection();
+        Connection connection = DbManager.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(INSERT_USER)) {
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
@@ -60,7 +60,7 @@ public class UserDB extends User {
     }
 
     public static List<User> findAllUsers() {
-        Connection con = DBManager.getConnection();
+        Connection con = DbManager.getConnection();
         List<User> users = new ArrayList<>();
 
         try (PreparedStatement ps = con.prepareStatement(SELECT_ALL)) {
@@ -72,7 +72,7 @@ public class UserDB extends User {
                 String lastName = rs.getString("last_name");
                 String userRole = rs.getString("role");
 
-                User user = new UserDB(userId, firstName, lastName, UserRole.valueOf(userRole));
+                User user = new UserDao(userId, firstName, lastName, UserRole.valueOf(userRole));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -83,7 +83,7 @@ public class UserDB extends User {
     }
 
     public static Boolean updateUser(User user) {
-        Connection con = DBManager.getConnection();
+        Connection con = DbManager.getConnection();
 
         try (PreparedStatement ps = con.prepareStatement(UPDATE_USER)) {
             ps.setString(1, user.getFirstName());
@@ -99,7 +99,7 @@ public class UserDB extends User {
     }
 
     public static User findById(String userId) {
-        Connection con = DBManager.getConnection();
+        Connection con = DbManager.getConnection();
         User user = null;
 
         try (PreparedStatement ps = con.prepareStatement(SELECT_USER_BY_ID)) {
@@ -111,7 +111,7 @@ public class UserDB extends User {
                 String lastName = rs.getString("last_name");
                 String userRole = rs.getString("role");
 
-                user = new UserDB(userId, firstName, lastName, UserRole.valueOf(userRole));
+                user = new UserDao(userId, firstName, lastName, UserRole.valueOf(userRole));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -120,10 +120,10 @@ public class UserDB extends User {
     }
 
 
-    public UserDB(String id, String password, String firstName, String lastName, UserRole role) {
+    public UserDao(String id, String password, String firstName, String lastName, UserRole role) {
         super(id, password, firstName, lastName, role);
     }
-    public UserDB(String id, String firstName, String lastName, UserRole role) {
+    public UserDao(String id, String firstName, String lastName, UserRole role) {
         super(id, firstName, lastName, role);
     }
 

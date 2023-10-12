@@ -1,4 +1,4 @@
-package com.distsys.webshop.db.data_access;
+package com.distsys.webshop.bo.enums;
 
 public enum SearchType {
     ID, NAME, CATEGORY, ANY

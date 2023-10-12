@@ -1,5 +1,5 @@
-<%@ page import="com.distsys.webshop.ui.view_model.ViewUser" %>
-<%@ page import="com.distsys.webshop.ui.view_model.ViewItem" %>
+<%@ page import="com.distsys.webshop.ui.viewmodel.UserDto" %>
+<%@ page import="com.distsys.webshop.ui.viewmodel.ItemDto" %>
 <%@ page import="java.util.List" %>
 <%--
   Created by IntelliJ IDEA.
@@ -17,13 +17,13 @@
 </head>
 <body>
 <header>
-    <a href="${pageContext.request.contextPath}/allItems">
+    <a href="${pageContext.request.contextPath}/items">
         <h1>Our store</h1>
     </a>
     <nav>
-        <a href="${pageContext.request.contextPath}/cart">Cart</a>
-        <a href="${pageContext.request.contextPath}/user">Profile</a>
-        <% ViewUser user = (ViewUser) session.getAttribute("user");
+        <a href="${pageContext.request.contextPath}/cart/list">Cart</a>
+        <a href="${pageContext.request.contextPath}/user/profile">Profile</a>
+        <% UserDto user = (UserDto) session.getAttribute("user");
             if (user == null){ %>
         <a href="${pageContext.request.contextPath}/user/login">Log in</a>
         <%  } else { %>
@@ -46,7 +46,7 @@
             </thead>
             <tbody>
             <%
-                List<ViewItem> items = (List<ViewItem>) request.getAttribute("items");
+                List<ItemDto> items = (List<ItemDto>) request.getAttribute("items");
                 if (items!=null && !items.isEmpty()){
                     int currentPage = (int) request.getAttribute("currentPage");
                     int itemsPerPage = 20;
@@ -54,7 +54,7 @@
                     int startIdx = (currentPage - 1) * itemsPerPage;
                     int endIdx = Math.min(startIdx + itemsPerPage, items.size());
                     for (int i = startIdx; i < endIdx; i++) {
-                        ViewItem item = items.get(i);
+                        ItemDto item = items.get(i);
             %>
             <tr>
                 <td><%= item.getName() %></td>
@@ -77,7 +77,7 @@
             <%
                 if (currentPage > 1) {
             %>
-            <a href="${pageContext.request.contextPath}/allItems?page=<%= currentPage - 1 %>">Back</a>
+            <a href="${pageContext.request.contextPath}/items?page=<%= currentPage - 1 %>">Back</a>
             <%
             } else {
             %>
@@ -89,7 +89,7 @@
             <%
                 if (currentPage < totalPages) {
             %>
-            <a href="${pageContext.request.contextPath}/allItems?page=<%= currentPage + 1 %>">Next</a>
+            <a href="${pageContext.request.contextPath}/items?page=<%= currentPage + 1 %>">Next</a>
             <%
             } else {
             %>

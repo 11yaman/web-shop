@@ -1,4 +1,4 @@
-package com.distsys.webshop.ui.servlet;
+package com.distsys.webshop.ui.servlets;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -17,12 +17,10 @@ public class OrderConfirmationFilter implements Filter {
         Boolean checkoutVisited = (Boolean) session.getAttribute("checkoutVisited");
 
         if (checkoutVisited != null && checkoutVisited) {
-            // User is confirming the order, proceed with the request
             chain.doFilter(request, response);
         } else {
-            // Redirect the user to the checkout page or an error page
             HttpServletResponse httpResponse = (HttpServletResponse) response;
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/checkout?error=confirm_error");
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/order/checkout?error=confirm_error");
         }
     }
 }

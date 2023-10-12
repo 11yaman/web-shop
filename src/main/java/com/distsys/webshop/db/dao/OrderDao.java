@@ -1,17 +1,16 @@
-package com.distsys.webshop.db.data_access;
+package com.distsys.webshop.db.dao;
 
 import com.distsys.webshop.bo.model.Order;
-import com.distsys.webshop.bo.model.enums.OrderStatus;
-import com.distsys.webshop.db.management.DBManager;
+import com.distsys.webshop.bo.enums.OrderStatus;
+import com.distsys.webshop.db.managers.DbManager;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class OrderDB extends Order {
+public class OrderDao extends Order {
     private static final String INSERT_ORDER = "INSERT INTO t_order (first_name, last_name, " +
             "street_name, zip_code, city, date_time, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -22,13 +21,8 @@ public class OrderDB extends Order {
     private static final String UPDATE_ORDER_STATUS = "UPDATE t_order SET status = ? WHERE id = ?";
 
 
-    public static Order createNewOrder(Order order) throws RuntimeException{
-        OrderDB.insertToOrderDB(order);
-        OrderItemDB.insertToOrderItemDB(order.getId(), order.getIdQuantityMap());
-        return order;
-    }
-    static void insertToOrderDB(Order order){
-        Connection con = DBManager.getConnection();
+    public static void addNewOrder(Order order) throws RuntimeException{
+        Connection con = DbManager.getConnection();
 
         try(PreparedStatement ps = con.prepareStatement(order.getUserId()!=null ? INSERT_ORDER_WITH_USER : INSERT_ORDER,
                 Statement.RETURN_GENERATED_KEYS)){
@@ -50,7 +44,7 @@ public class OrderDB extends Order {
 
     public static List<Order> findUncompletedOrders() {
         List<Order> uncompletedOrders = new ArrayList<>();
-        Connection con = DBManager.getConnection();
+        Connection con = DbManager.getConnection();
 
         try (PreparedStatement ps = con.prepareStatement(SELECT_UNCOMPLETED_ORDERS)) {
             ps.setString(1, OrderStatus.CREATED.name());
@@ -66,7 +60,7 @@ public class OrderDB extends Order {
                     OrderStatus status = OrderStatus.valueOf(rs.getString("status"));
                     String userId = rs.getString("user_id");
 
-                    Order order = new OrderDB(orderId, firstName, lastName, streetName, zipCode, city,
+                    Order order = new OrderDao(orderId, firstName, lastName, streetName, zipCode, city,
                             dateTime, status, userId);
                     uncompletedOrders.add(order);
                 }
@@ -78,7 +72,7 @@ public class OrderDB extends Order {
     }
 
     public static boolean updateOrderAsCompleted(int id) {
-        Connection con = DBManager.getConnection();
+        Connection con = DbManager.getConnection();
         
         try (PreparedStatement ps = con.prepareStatement(UPDATE_ORDER_STATUS)) {
 
@@ -102,7 +96,7 @@ public class OrderDB extends Order {
         return -1;
     }
 
-    private OrderDB(int id, String firstName, String lastName, String streetName, String zipCode, String city, LocalDateTime dateTime, OrderStatus status, String userId) {
+    private OrderDao(int id, String firstName, String lastName, String streetName, String zipCode, String city, LocalDateTime dateTime, OrderStatus status, String userId) {
         super(id, firstName, lastName, streetName, zipCode, city, dateTime, status, userId);
     }
 

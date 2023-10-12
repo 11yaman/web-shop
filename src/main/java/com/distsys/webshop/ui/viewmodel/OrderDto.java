@@ -1,15 +1,13 @@
-package com.distsys.webshop.ui.view_model;
+package com.distsys.webshop.ui.viewmodel;
 
-import com.distsys.webshop.bo.model.enums.OrderStatus;
+import com.distsys.webshop.bo.enums.OrderStatus;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class ViewOrder implements Serializable {
+public class OrderDto implements Serializable {
     private double total;
     private String userId;
     private final Map<Integer, Integer> itemIdsAndQuantity;
@@ -22,8 +20,8 @@ public class ViewOrder implements Serializable {
     private OrderStatus status;
     private LocalDateTime dateTime;
 
-    public ViewOrder(String userId, Map<Integer, Integer> itemIdsAndQuantity, String firstName, String lastName,
-                     String streetName, String zipCode, String city) {
+    public OrderDto(String userId, Map<Integer, Integer> itemIdsAndQuantity, String firstName, String lastName,
+                    String streetName, String zipCode, String city) {
         this.userId = userId;
         this.itemIdsAndQuantity = itemIdsAndQuantity;
         this.firstName = firstName;
@@ -34,8 +32,8 @@ public class ViewOrder implements Serializable {
         this.total = 0.0;
     }
 
-    public ViewOrder(int id, String firstName, String lastName, String streetName, String zipCode,
-                     String city, LocalDateTime dateTime, OrderStatus status, String userId) {
+    public OrderDto(int id, String firstName, String lastName, String streetName, String zipCode,
+                    String city, LocalDateTime dateTime, OrderStatus status, String userId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

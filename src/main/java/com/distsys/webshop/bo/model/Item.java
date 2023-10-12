@@ -1,8 +1,8 @@
 package com.distsys.webshop.bo.model;
 
 
-import com.distsys.webshop.db.data_access.ItemDB;
-import com.distsys.webshop.db.data_access.SearchType;
+import com.distsys.webshop.bo.enums.SearchType;
+import com.distsys.webshop.db.dao.ItemDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +22,17 @@ public class Item {
     }
 
     public static List<Item> getItems(SearchType searchType, String searchParam) {
-        return new ArrayList<>(ItemDB.findBy(searchType, searchParam));
+        return new ArrayList<>(ItemDao.findBy(searchType, searchParam));
     }
 
     public static List<Item> getAllItems() {
-        return new ArrayList<>(ItemDB.findBy(SearchType.ANY, ""));
+        return new ArrayList<>(ItemDao.findBy(SearchType.ANY, ""));
 
     }
 
     public static Item getItemById(int id) {
         try {
-            return ItemDB.findBy(SearchType.ID, String.valueOf(id)).get(0);
+            return ItemDao.findBy(SearchType.ID, String.valueOf(id)).get(0);
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
@@ -40,7 +40,7 @@ public class Item {
 
     public static void updateStockAfterOrder(Map<Integer, Integer> idQuantityMap) {
         for (Map.Entry<Integer, Integer> entry : idQuantityMap.entrySet()) {
-            ItemDB.updateItemStockQuantity(entry.getKey(), entry.getValue());
+            ItemDao.updateItemStockQuantity(entry.getKey(), entry.getValue());
         }
     }
 

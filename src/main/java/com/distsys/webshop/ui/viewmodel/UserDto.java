@@ -1,33 +1,33 @@
-package com.distsys.webshop.ui.view_model;
+package com.distsys.webshop.ui.viewmodel;
 
-import com.distsys.webshop.bo.model.enums.UserRole;
+import com.distsys.webshop.bo.enums.UserRole;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewUser implements Serializable {
+public class UserDto implements Serializable {
     private final String userId;
     private String password;
     private String firstName;
     private String lastName;
     private UserRole role;
-    private List<ViewOrder> orders;
+    private List<OrderDto> orders;
 
 
-    public ViewUser(String userId, String password) {
+    public UserDto(String userId, String password) {
         this.userId = userId;
         this.password = password;
     }
 
-    public ViewUser(String userId,  String firstName, String lastName, UserRole role) {
+    public UserDto(String userId, String firstName, String lastName, UserRole role) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
     }
 
-    public ViewUser(String userId, String password, String firstName, String lastName, UserRole role) {
+    public UserDto(String userId, String password, String firstName, String lastName, UserRole role) {
         this.userId = userId;
         this.password = password;
         this.firstName = firstName;
@@ -51,7 +51,7 @@ public class ViewUser implements Serializable {
         return role;
     }
 
-    public List<ViewOrder> getOrders() {
+    public List<OrderDto> getOrders() {
         return new ArrayList<>(orders);
     }
 

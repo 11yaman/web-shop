@@ -1,4 +1,4 @@
-package com.distsys.webshop.db.management;
+package com.distsys.webshop.db.managers;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,7 +9,7 @@ public class TransactionManager {
         if (isTransactionOngoing)
             throw new IllegalStateException("Transaction is already in progress.");
 
-        Connection con = DBManager.getConnection();
+        Connection con = DbManager.getConnection();
         try {
             con.setAutoCommit(false);
             isTransactionOngoing = true;
@@ -22,7 +22,7 @@ public class TransactionManager {
         if (!isTransactionOngoing)
             throw new IllegalStateException("No transaction in progress.");
 
-        Connection con = DBManager.getConnection();
+        Connection con = DbManager.getConnection();
         try {
             con.commit();
             con.setAutoCommit(true);
@@ -43,7 +43,7 @@ public class TransactionManager {
         if (!isTransactionOngoing)
             throw new IllegalStateException("No transaction in progress.");
 
-        Connection con = DBManager.getConnection();
+        Connection con = DbManager.getConnection();
         try {
             con.rollback();
         } catch (SQLException e) {

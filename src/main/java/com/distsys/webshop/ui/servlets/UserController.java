@@ -1,8 +1,8 @@
-package com.distsys.webshop.ui.servlet;
+package com.distsys.webshop.ui.servlets;
 
 import com.distsys.webshop.bo.handlers.UserHandler;
-import com.distsys.webshop.bo.model.enums.UserRole;
-import com.distsys.webshop.ui.view_model.ViewUser;
+import com.distsys.webshop.bo.enums.UserRole;
+import com.distsys.webshop.ui.viewmodel.UserDto;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet(name = "UserController", value = {"/user", "/user/login", "/user/logout", "/user/register"})
+@WebServlet(name = "UserController", value = {"/user/profile", "/user/login", "/user/logout", "/user/register"})
 public class UserController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -22,7 +22,7 @@ public class UserController extends HttpServlet {
         HttpSession session = request.getSession();
 
         switch (action) {
-            case "/user":
+            case "/user/profile":
                 roleSpecificProfile(request, response, session);
                 break;
             case "/user/login":
@@ -47,15 +47,15 @@ public class UserController extends HttpServlet {
     private void roleSpecificProfile(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws ServletException, IOException {
 
-        ViewUser user = (ViewUser) session.getAttribute("user");
+        UserDto user = (UserDto) session.getAttribute("user");
         if(user == null)
             request.getRequestDispatcher(request.getContextPath() +"/user/login").forward(request, response);
         else if (user.getRole() == UserRole.CUSTOMER)
             request.getRequestDispatcher(request.getContextPath() +"/customer.jsp").forward(request, response);
         else if (user.getRole() == UserRole.STAFF)
-            request.getRequestDispatcher(request.getContextPath() +"/staff").forward(request, response);
+            response.sendRedirect(request.getContextPath() +"/staff/profile");
         else if (user.getRole() == UserRole.ADMIN)
-            request.getRequestDispatcher(request.getContextPath() +"/admin").forward(request, response);
+            response.sendRedirect(request.getContextPath() +"/admin/profile");
     }
 
     private void login(HttpServletRequest request, HttpServletResponse response, HttpSession session)
@@ -64,11 +64,11 @@ public class UserController extends HttpServlet {
         String password = request.getParameter("password");
 
         if (password != null && userId != null) {
-            ViewUser user = UserHandler.handleUserLogin(userId, password);
+            UserDto user = UserHandler.handleUserLogin(userId, password);
 
             if(user!=null) {
                 session.setAttribute("user", user);
-                response.sendRedirect(request.getContextPath() + "/user");
+                response.sendRedirect(request.getContextPath() + "/user/profile");
                 return;
             }
         }
@@ -89,11 +89,11 @@ public class UserController extends HttpServlet {
         String password = request.getParameter("password");
 
         if (password != null && userId != null) {
-            ViewUser user = UserHandler.handleUserRegister(
-                            new ViewUser(userId, password, firstName, lastName, UserRole.CUSTOMER), password);
+            UserDto user = UserHandler.handleUserRegister(
+                            new UserDto(userId, password, firstName, lastName, UserRole.CUSTOMER), password);
             System.out.println(user);
             session.setAttribute("user", user);
-            response.sendRedirect(request.getContextPath() + "/user");
+            response.sendRedirect(request.getContextPath() + "/user/profile");
         } else {
             request.getRequestDispatcher(request.getContextPath() + "/register.jsp").forward(request, response);
         }

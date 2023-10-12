@@ -1,4 +1,4 @@
-<%@ page import="com.distsys.webshop.ui.view_model.ViewUser" %><%--
+<%@ page import="com.distsys.webshop.ui.viewmodel.UserDto" %><%--
   Created by IntelliJ IDEA.
   User: Yaman
   Date: 2023-10-09
@@ -15,18 +15,18 @@
 </head>
 <body>
 <header>
-    <a href="${pageContext.request.contextPath}/allItems">
+    <a href="${pageContext.request.contextPath}/items">
         <h1>Our store</h1>
     </a>
     <nav>
-        <a href="${pageContext.request.contextPath}/cart">Cart</a>
-        <a href="${pageContext.request.contextPath}/user">Profile</a>
-        <% ViewUser user = (ViewUser) session.getAttribute("user");
+        <a href="${pageContext.request.contextPath}/cart/list">Cart</a>
+        <a href="${pageContext.request.contextPath}/user/profile">Profile</a>
+        <% UserDto user = (UserDto) session.getAttribute("user");
             if (user == null){ %>
         <a href="${pageContext.request.contextPath}/user/login">Log in</a>
         <%
             } else {
-                request.getRequestDispatcher(request.getContextPath() +"/user").forward(request, response);
+                request.getRequestDispatcher(request.getContextPath() +"/user/profile").forward(request, response);
             } %>
     </nav>
 </header>

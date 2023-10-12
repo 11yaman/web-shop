@@ -1,18 +1,18 @@
-package com.distsys.webshop.db.management;
+package com.distsys.webshop.db.managers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class DBManager {
-    private static DBManager instance = null;
+public class DbManager {
+    private static DbManager instance = null;
     private final Connection con;
-    private static DBManager getInstance() {
+    private static DbManager getInstance() {
         if (instance == null) {
-            instance = new DBManager();
+            instance = new DbManager();
         }
         return instance;
     }
-    private DBManager() {
+    private DbManager() {
         String server
                 = "jdbc:mysql://localhost:3306/web_shop?UseClientEnc=UTF8";
         try {

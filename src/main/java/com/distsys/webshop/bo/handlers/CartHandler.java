@@ -1,21 +1,21 @@
 package com.distsys.webshop.bo.handlers;
 
-import com.distsys.webshop.ui.view_model.ViewCart;
-import com.distsys.webshop.ui.view_model.ViewItem;
+import com.distsys.webshop.ui.viewmodel.CartDto;
+import com.distsys.webshop.ui.viewmodel.ItemDto;
 
 import java.util.Map;
 
 public class CartHandler {
-    public static void handleAddItem(ViewCart viewCart, ViewItem itemToAdd) {
-        viewCart.addItem(itemToAdd);
+    public static void handleAddItem(CartDto cartDto, ItemDto itemToAdd) {
+        cartDto.addItem(itemToAdd);
     }
-    public static void handleRemoveItem(ViewCart viewCart, ViewItem itemToRemove) {
-        viewCart.removeItem(itemToRemove);
+    public static void handleRemoveItem(CartDto cartDto, ItemDto itemToRemove) {
+        cartDto.removeItem(itemToRemove);
     }
-    public static double handleGetTotal(ViewCart viewCart) {
+    public static double handleGetTotal(CartDto cartDto) {
         double total = 0.0;
-        for (Map.Entry<ViewItem, Integer> entry : viewCart.getItemQuantityMap().entrySet()) {
-            ViewItem item = entry.getKey();
+        for (Map.Entry<ItemDto, Integer> entry : cartDto.getItemQuantityMap().entrySet()) {
+            ItemDto item = entry.getKey();
             int quantityInCart = entry.getValue();
             double itemTotal = item.getPrice() * quantityInCart;
             total += itemTotal;

@@ -1,6 +1,6 @@
-<%@ page import="com.distsys.webshop.ui.view_model.ViewUser" %>
+<%@ page import="com.distsys.webshop.ui.viewmodel.UserDto" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.distsys.webshop.bo.model.enums.UserRole" %>
+<%@ page import="com.distsys.webshop.bo.enums.UserRole" %>
 <%--
   Created by IntelliJ IDEA.
   User: Yaman
@@ -13,17 +13,17 @@
 <head>
     <title>Admin Profile</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin_profile.css">
 </head>
 <body>
 <header>
-    <a href="${pageContext.request.contextPath}/allItems">
+    <a href="${pageContext.request.contextPath}/items">
         <h1>Our store</h1>
     </a>
     <nav>
-        <a href="${pageContext.request.contextPath}/cart">Cart</a>
-        <a href="${pageContext.request.contextPath}/user">Profile</a>
-        <% ViewUser user = (ViewUser) session.getAttribute("user");
+        <a href="${pageContext.request.contextPath}/cart/list">Cart</a>
+        <a href="${pageContext.request.contextPath}/user/profile">Profile</a>
+        <% UserDto user = (UserDto) session.getAttribute("user");
             if (user == null || user.getRole()!= UserRole.ADMIN){
                 response.sendRedirect(request.getContextPath() +"/user/login");
             } else { %>
@@ -34,7 +34,7 @@
 
 <main>
     <section>
-        <h2>Logged in as admin: <%=user.getUserId()%> %></h2>
+        <h2>Logged in as admin: <%=user.getUserId()%></h2>
     </section>
 
     <section>
@@ -51,7 +51,7 @@
             </thead>
             <tbody>
             <%
-                List<ViewUser> allUsers = (List<ViewUser>) request.getAttribute("allUsers");
+                List<UserDto> allUsers = (List<UserDto>) request.getAttribute("allUsers");
                 if (allUsers!=null && !allUsers.isEmpty()){
                     int currentPage = (int) request.getAttribute("currentPage");
                     int itemsPerPage = 20;
@@ -59,7 +59,7 @@
                     int startIdx = (currentPage - 1) * itemsPerPage;
                     int endIdx = Math.min(startIdx + itemsPerPage, allUsers.size());
                     for (int i = startIdx; i < endIdx; i++) {
-                        ViewUser u = allUsers.get(i);
+                        UserDto u = allUsers.get(i);
             %>
             <tr>
                 <td><%= u.getUserId() %></td>
